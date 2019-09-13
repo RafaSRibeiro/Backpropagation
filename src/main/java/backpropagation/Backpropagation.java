@@ -2,24 +2,30 @@ package backpropagation;
 
 public class Backpropagation {
 
-    private int x[] = new int[63];
-    private double z[] = new double[63];
-    private double z_in[] = new double[63];
-    private double y_in[] = new double[7];
-    private double y[] = new double[7];
-    private double t[] = new double[7];
-    private double littleDelta[] = new double[63];
-    private double littleDelta_in[] = new double[63];
+    private static final int X_SIZE = 63;
+    private static final int Z_SIZE = 63;
+
+    private static final int T_SIZE = 7;
+    private static final int Y_SIZE = 7;
+
+    private int x[] = new int[X_SIZE];
+    private double z[] = new double[Z_SIZE];
+    private double z_in[] = new double[Z_SIZE];
+    private double y_in[] = new double[Y_SIZE];
+    private double y[] = new double[Y_SIZE];
+    private double t[] = new double[T_SIZE];
+    private double littleDelta[] = new double[X_SIZE];
+    private double littleDelta_in[] = new double[X_SIZE];
     private double learningRate = 0.2;
 
 
-    private double v[][] = new double[63][63];
-    private double w[][] = new double[63][7];
-    private double deltaW[][] = new double[63][7];
-    private double deltaV[][] = new double[63][63];
+    private double v[][] = new double[X_SIZE][Z_SIZE];
+    private double w[][] = new double[Z_SIZE][Y_SIZE];
+    private double deltaW[][] = new double[Z_SIZE][Y_SIZE];
+    private double deltaV[][] = new double[X_SIZE][Z_SIZE];
 
 
-    int[] letterA1 = new int[]{-1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1};
+    int[] letterA1 = new int[]{-1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
 
     public void training() {
         step0();
@@ -29,6 +35,7 @@ public class Backpropagation {
         step6();
         step7();
         step8();
+        System.console();
     }
 
     private void step0() {
@@ -45,16 +52,13 @@ public class Backpropagation {
         }
     }
 
-    private static double sigmoideBinaria(double x) {
-        return 1 / (1 + Math.exp(-x));
-    }
-
-    private static double sigmoideBipolar(double x) {
-        return (2 / (1 + Math.exp(-x))) * -1;
-    }
-
     private void step3(int[] letter) {
-        x = letter;
+        for (int i = 0; i < X_SIZE; i++) {
+            x[i] = letter[i];
+        }
+        for (int i = X_SIZE; i < X_SIZE + T_SIZE; i++) {
+            t[i - X_SIZE] = letter[i];
+        }
     }
 
     private void step4() {
@@ -127,6 +131,14 @@ public class Backpropagation {
                 v[i][j] = v[i][j] + deltaV[i][j];
             }
         }
+    }
+
+    private static double sigmoideBinaria(double x) {
+        return 1 / (1 + Math.exp(-x));
+    }
+
+    private static double sigmoideBipolar(double x) {
+        return (2 / (1 + Math.exp(-x))) * -1;
     }
 
 }
