@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 public class Main extends JFrame{
     public static ArrayList<int[]> letters = new ArrayList<int[]>();
+    public static ArrayList<int[]> tLetters = new ArrayList<int[]>();
 
     public Main() {
 
@@ -38,6 +39,7 @@ public class Main extends JFrame{
     //metodo para ler os arquivos da pasta /training set
     public static void LetterReader(){
         int [] letter = new int[63];
+        int [] tLetter = new int[7];
         File files[];
         File folder = new File("/training set");
         files = folder.listFiles();
@@ -63,14 +65,15 @@ public class Main extends JFrame{
                         for (int j = 0; j < row.length(); j++) {
                             Character currentChar = row.charAt(j);
                             if (currentChar.equals("."))
-                                letter[j] = 0;
+                                tLetter[j] = 0;
                             else
-                                letter[j] = 1;
+                                tLetter[j] = 1;
                         }
                     }
                 }
                 br.close();
                 letters.add(letter);
+                tLetters.add(tLetter);
             } catch (IOException ioe) {
             }
         }
