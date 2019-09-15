@@ -103,7 +103,7 @@ public class Backpropagation {
 
     private void step6() {
         for (int k = 0; k < y.length; k++) {
-            littleDelta[k] = (t[k] - y[k]) * y_in[k] * (1 - y_in[k]);
+            littleDelta[k] = (t[k] - y[k]) * y[k] * (1 - y[k]);
         }
 
         for (int k = 0; k < y.length; k++) {
