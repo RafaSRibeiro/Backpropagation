@@ -92,7 +92,7 @@ public class Backpropagation {
         for (int k = 0; k < y.length; k++) {
             y_in[k] = 0;
             for (int j = 0; j < z.length; j++) {
-                y_in[k] += x[j] * v[j][k];
+                y_in[k] += z[j] * w[j][k];
             }
         }
 
