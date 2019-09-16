@@ -15,7 +15,7 @@ public class Main extends JFrame {
     public static ArrayList<int[]> letters = new ArrayList<int[]>();
 
     public Main() {
-        int[] letterA1 = new int[]{-1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 0, 0, 0, 0};
+//        int[] letterA1 = new int[]{-1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, 0, 0, 0, 0};
 
 
 //        setTitle("Backpropagation");
@@ -32,7 +32,10 @@ public class Main extends JFrame {
         letterReader();
         Backpropagation backpropagation = new Backpropagation(letters);
         backpropagation.training();
-        System.out.println(Arrays.toString(backpropagation.recognition(letterA1)));
+
+        int[] letter = recognitionLetterReader();
+        double[] result = backpropagation.recognition(letter);
+        System.out.println(Arrays.toString(result));
     }
 
     //metodo para ler os arquivos da pasta /training set
@@ -74,6 +77,43 @@ public class Main extends JFrame {
             } catch (IOException ioe) {
             }
         }
+    }
+
+    private int[] recognitionLetterReader() {
+        File recognitionFile = new File("recognition/recognition.txt");
+
+        String row = new String();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(recognitionFile));
+            while (br.ready()) { //lê o arquivo enquanto houver linhas
+                row += br.readLine().trim();
+            }
+            br.close();
+
+        } catch (IOException ioe) {
+        }
+
+        int[] letter = new int[70];
+        for (int j = 0; j < 63; j++) {
+            Character currentChar = row.charAt(j);
+            if (currentChar.equals('.')) {
+                letter[j] = -1;
+            } else if (currentChar.equals('#')) {
+                letter[j] = 1;
+            } else {
+                letter[j] = 0;
+            }
+        }
+
+        for (int j = 63; j < 70; j++) {
+            Character currentChar = row.charAt(j);
+            if (currentChar.equals('.'))
+                letter[j] = 0;
+            else
+                letter[j] = 1;
+        }
+
+        return letter;
     }
 
     public static void main(String args[]) {
