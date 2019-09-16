@@ -18,7 +18,8 @@ public class Backpropagation {
     private double y_in[] = new double[Y_SIZE];
     private double y[] = new double[Y_SIZE];
     private double t[] = new double[T_SIZE];
-    private double littleDelta[] = new double[X_SIZE];
+    private double littleDeltaJ[] = new double[X_SIZE];
+    private double littleDeltaK[] = new double[Y_SIZE];
     private double littleDelta_in[] = new double[X_SIZE];
     private double learningRate = 0.2;
 
@@ -84,7 +85,7 @@ public class Backpropagation {
         }
 
         for (int j = 0; j < z.length; j++) {
-            z[j] = sigmoideBinaria(z_in[j]);
+            z[j] = sigmoideBipolar(z_in[j]);
         }
     }
 
@@ -97,18 +98,19 @@ public class Backpropagation {
         }
 
         for (int k = 0; k < y.length; k++) {
-            y[k] = sigmoideBinaria(y_in[k]);
+            y[k] = sigmoideBipolar(y_in[k]);
         }
     }
 
     private void step6() {
         for (int k = 0; k < y.length; k++) {
-            littleDelta[k] = (t[k] - y[k]) * y[k] * (1 - y[k]);
+//            littleDelta[k] = (t[k] - y[k]) * y[k] * (1 - y[k]);
+            littleDeltaK[k] = 0.5 * (1 + y[k]) * (1 - y[k]);
         }
 
         for (int k = 0; k < y.length; k++) {
             for (int j = 0; j < z.length; j++) {
-                deltaW[j][k] = learningRate * littleDelta[k] * z[j];
+                deltaW[j][k] = learningRate * littleDeltaK[k] * z[j];
             }
         }
     }
@@ -118,17 +120,17 @@ public class Backpropagation {
         for (int j = 0; j < z.length; j++) {
             littleDelta_in[j] = 0;
             for (int k = 0; k < y.length; k++) {
-                littleDelta_in[k] += littleDelta[k] * w[j][k];
+                littleDelta_in[k] += littleDeltaK[k] * w[j][k];
             }
         }
 
         for (int j = 0; j < z.length; j++) {
-            littleDelta[j] = littleDelta_in[j] * z_in[j] * (1 - z_in[j]);
+            littleDeltaJ[j] = littleDelta_in[j] * z_in[j] * (1 - z_in[j]);
         }
 
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < z.length; j++) {
-                deltaV[i][j] = learningRate * littleDelta[j] * x[i];
+                deltaV[i][j] = learningRate * littleDeltaJ[j] * x[i];
             }
         }
     }
@@ -152,7 +154,7 @@ public class Backpropagation {
     }
 
     private static double sigmoideBipolar(double x) {
-        return (2 / (1 + Math.exp(-x))) * -1;
+        return (2 / (1 + Math.exp(-x))) -1;
     }
 
 }
