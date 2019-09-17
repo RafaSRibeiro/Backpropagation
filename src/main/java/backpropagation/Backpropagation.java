@@ -105,7 +105,6 @@ public class Backpropagation {
 
     private void step6() {
         for (int k = 0; k < y.length; k++) {
-//            littleDeltaK[k] = (t[k] - y[k]) * y[k] * (1 - y[k]);
             littleDeltaK[k] = (t[k] - y[k]) * sigmoidBipolarDerived(y_in[k]);
         }
 

@@ -3,26 +3,58 @@ package program;
 import backpropagation.Backpropagation;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main extends JFrame {
     public static ArrayList<int[]> letters = new ArrayList<int[]>();
 
+    private String fileName;
+
+    Backpropagation backpropagation = new Backpropagation(letters);
+
     public Main() {
 
+        setTitle("Lexic Analizer");
+        setResizable(true);
+        this.setExtendedState( this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+
+        JPanel panel = (JPanel) this.getContentPane();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JButton learnerButton = new JButton("Learn");
+        learnerButton.addActionListener(new ActionListener() {
+            //ação ao clica no botão
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        JButton recognizerButton = new JButton("Recognition");
+        recognizerButton.addActionListener(new ActionListener() {
+            //ação ao clica no botão
+            public void actionPerformed(ActionEvent e) {
+                selectFile();
+            }
+        });
+
+        panel.add(learnerButton);
+        panel.add(recognizerButton);
+
         letterReader();
-        Backpropagation backpropagation = new Backpropagation(letters);
+
         backpropagation.training();
 
-        int[] letter = recognitionLetterReader();
-        double[] result = backpropagation.recognition(letter);
-        System.out.println(Arrays.toString(result));
-        translateResult(result);
+//        int[] letter = recognitionLetterReader();
+
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
     //metodo para ler os arquivos da pasta /training set
@@ -68,8 +100,8 @@ public class Main extends JFrame {
         }
     }
 
-    private int[] recognitionLetterReader() {
-        File recognitionFile = new File("recognition/recognition.txt");
+    private int[] recognitionLetterReader(File recognitionFile) {
+//        File recognitionFile = new File("recognition/recognition.txt");
 
         String row = new String();
         try {
@@ -98,6 +130,7 @@ public class Main extends JFrame {
     }
 
     public static void main(String args[]) {
+        for (int i = 0; i < 20; i++)
         new Main();
     }
 
@@ -137,4 +170,17 @@ public class Main extends JFrame {
         System.out.println("com " + max + "% de chance");
     }
 
+    public void selectFile() {
+        JFileChooser chooser = new JFileChooser();
+        // optionally set chooser options ...
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File recognitionFile = chooser.getSelectedFile();
+            int[] letter = recognitionLetterReader(recognitionFile);
+            double[] result = backpropagation.recognition(letter);
+//        System.out.println(Arrays.toString(result));
+            translateResult(result);
+        } else {
+            // user changed their mind
+        }
+    }
 }
