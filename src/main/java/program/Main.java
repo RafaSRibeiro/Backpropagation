@@ -40,19 +40,19 @@ public class Main extends JFrame {
                 }
                 br.close();
 
-                int[] letter = new int[70];
-                for (int j = 0; j < 63; j++) {
+                int[] letter = new int[Backpropagation.X_SIZE + Backpropagation.Y_SIZE];
+                for (int j = 0; j < Backpropagation.X_SIZE; j++) {
                     Character currentChar = row.charAt(j);
                     if (currentChar.equals('.')) {
                         letter[j] = -1;
                     } else if (currentChar.equals('#')) {
                         letter[j] = 1;
                     } else {
-                        letter[j] = 0;
+                        throw new Exception("Caracter não reconhecido no método de aprendizagem");
                     }
                 }
 
-                for (int j = 63; j < 70; j++) {
+                for (int j = Backpropagation.X_SIZE; j < Backpropagation.X_SIZE + Backpropagation.Y_SIZE; j++) {
                     Character currentChar = row.charAt(j);
                     if (currentChar.equals('.'))
                         letter[j] = 0;
@@ -61,6 +61,8 @@ public class Main extends JFrame {
                 }
                 letters.add(letter);
             } catch (IOException ioe) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -79,8 +81,8 @@ public class Main extends JFrame {
         } catch (IOException ioe) {
         }
 
-        int[] letter = new int[70];
-        for (int j = 0; j < 63; j++) {
+        int[] letter = new int[Backpropagation.X_SIZE + Backpropagation.Y_SIZE];
+        for (int j = 0; j < Backpropagation.X_SIZE; j++) {
             Character currentChar = row.charAt(j);
             if (currentChar.equals('.')) {
                 letter[j] = -1;
@@ -89,14 +91,6 @@ public class Main extends JFrame {
             } else {
                 letter[j] = 0;
             }
-        }
-
-        for (int j = 63; j < 70; j++) {
-            Character currentChar = row.charAt(j);
-            if (currentChar.equals('.'))
-                letter[j] = 0;
-            else
-                letter[j] = 1;
         }
 
         return letter;

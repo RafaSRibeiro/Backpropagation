@@ -6,13 +6,13 @@ public class Backpropagation {
 
     ArrayList<int[]> letters = new ArrayList();
 
-    private static final int X_SIZE = 63;
-    private static final int Z_SIZE = 63;
+    public static final int X_SIZE = 63;
+    public static final int Z_SIZE = 63;
 
-    private static final int T_SIZE = 7;
-    private static final int Y_SIZE = 7;
+    public static final int T_SIZE = 7;
+    public static final int Y_SIZE = 7;
 
-    private int x[] = new int[X_SIZE];
+    private double x[] = new double[X_SIZE];
     private double z[] = new double[Z_SIZE];
     private double z_in[] = new double[Z_SIZE];
     private double y_in[] = new double[Y_SIZE];
@@ -56,13 +56,13 @@ public class Backpropagation {
     private void step0() {
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < z.length; j++) {
-                v[i][j] = Math.random();
+                v[i][j] = Math.random() - 0.5;
             }
         }
 
         for (int j = 0; j < z.length; j++) {
             for (int k = 0; k < y.length; k++) {
-                w[j][k] = Math.random();
+                w[j][k] = Math.random() - 0.5;
             }
         }
     }
@@ -104,8 +104,8 @@ public class Backpropagation {
 
     private void step6() {
         for (int k = 0; k < y.length; k++) {
-//            littleDelta[k] = (t[k] - y[k]) * y[k] * (1 - y[k]);
-            littleDeltaK[k] = 0.5 * (1 + y[k]) * (1 - y[k]);
+//            littleDeltaK[k] = (t[k] - y[k]) * y[k] * (1 - y[k]);
+            littleDeltaK[k] = (t[k] - y[k]) * sigmoidBipolarDerived(y_in[k]);
         }
 
         for (int k = 0; k < y.length; k++) {
@@ -120,12 +120,12 @@ public class Backpropagation {
         for (int j = 0; j < z.length; j++) {
             littleDelta_in[j] = 0;
             for (int k = 0; k < y.length; k++) {
-                littleDelta_in[k] += littleDeltaK[k] * w[j][k];
+                littleDelta_in[j] += littleDeltaK[k] * w[j][k];
             }
         }
 
         for (int j = 0; j < z.length; j++) {
-            littleDeltaJ[j] = littleDelta_in[j] * z_in[j] * (1 - z_in[j]);
+            littleDeltaJ[j] = littleDelta_in[j] * sigmoidBipolarDerived(z_in[j]);
         }
 
         for (int i = 0; i < x.length; i++) {
@@ -154,7 +154,11 @@ public class Backpropagation {
     }
 
     private static double sigmoideBipolar(double x) {
-        return (2 / (1 + Math.exp(-x))) -1;
+        return (2 / (1 + Math.exp(-x))) - 1;
+    }
+
+    private static double sigmoidBipolarDerived(double x) {
+        return (0.5 * (1 + sigmoideBipolar(x)) * (1 - sigmoideBipolar(x)));
     }
 
 }
