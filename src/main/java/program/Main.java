@@ -22,6 +22,7 @@ public class Main extends JFrame {
         int[] letter = recognitionLetterReader();
         double[] result = backpropagation.recognition(letter);
         System.out.println(Arrays.toString(result));
+        translateResult(result);
     }
 
     //metodo para ler os arquivos da pasta /training set
@@ -99,4 +100,41 @@ public class Main extends JFrame {
     public static void main(String args[]) {
         new Main();
     }
+
+    private static void translateResult(double[] result) {
+        double max = result[0];
+        int indexMax = 0;
+        for (int i = 1; i < result.length; i++) {
+            if (result[i] > max) {
+                max = result[i];
+                indexMax = i;
+            }
+        }
+        switch (indexMax) {
+            case 0:
+                System.out.println("A");
+                break;
+            case 1:
+                System.out.println("B");
+                break;
+            case 2:
+                System.out.println("C");
+                break;
+            case 3:
+                System.out.println("D");
+                break;
+            case 4:
+                System.out.println("E");
+                break;
+            case 5:
+                System.out.println("J");
+                break;
+            case 6:
+                System.out.println("K");
+                break;
+        }
+
+        System.out.println("com " + max + "% de chance");
+    }
+
 }
