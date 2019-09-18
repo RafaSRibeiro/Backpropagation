@@ -34,9 +34,7 @@ public class Main extends JFrame {
         learnerButton.addActionListener(new ActionListener() {
             //ação ao clica no botão
             public void actionPerformed(ActionEvent e) {
-                backpropagation.training(letterReader());
-                textArea.append("Treinamento finalizado\n");
-                textArea.append("----------------------\n");
+                selectLearningFiles();
             }
         });
 
@@ -44,9 +42,7 @@ public class Main extends JFrame {
         recognizerButton.addActionListener(new ActionListener() {
             //ação ao clica no botão
             public void actionPerformed(ActionEvent e) {
-                selectFile();
-                textArea.append("Reconhecimento finalizado\n");
-                textArea.append("-------------------------\n");
+                selectRecognizerFile();
             }
         });
 
@@ -60,11 +56,11 @@ public class Main extends JFrame {
     }
     //metodo para ler os arquivos da pasta /training set
 
-    public ArrayList<int[]> letterReader() {
+    public ArrayList<int[]> letterReader(File[] files) {
 
-        File files[];
-        File folder = new File("training_set");
-        files = folder.listFiles();
+//        File files[];
+//        File folder = new File("training_set");
+//        files = folder.listFiles();
         ArrayList<int[]> letters = new ArrayList<int[]>();
 
         for (int i = 0; i < files.length; i++) {
@@ -173,13 +169,27 @@ public class Main extends JFrame {
         textArea.append(letter + " com " + max + "% de chance.\n");
     }
 
-    public void selectFile() {
+    public void selectRecognizerFile() {
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File recognitionFile = chooser.getSelectedFile();
             int[] letter = recognitionLetterReader(recognitionFile);
             double[] result = backpropagation.recognition(letter);
             translateResult(result);
+            textArea.append("Reconhecimento finalizado\n");
+            textArea.append("-------------------------\n");
+        } else {
+        }
+    }
+
+    public void selectLearningFiles() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File[] learningFiles = chooser.getSelectedFiles();
+            backpropagation.training(letterReader(learningFiles));
+            textArea.append("Treinamento finalizado\n");
+            textArea.append("----------------------\n");
         } else {
         }
     }

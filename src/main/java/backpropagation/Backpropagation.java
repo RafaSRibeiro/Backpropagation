@@ -28,10 +28,6 @@ public class Backpropagation {
     private double deltaW[][] = new double[Z_SIZE][Y_SIZE];
     private double deltaV[][] = new double[X_SIZE][Z_SIZE];
 
-    public Backpropagation() {
-        step0();
-    }
-
     public double[] recognition(int[] letter) {
         step3(letter);
         step4();
@@ -40,6 +36,7 @@ public class Backpropagation {
     }
 
     public void training(ArrayList<int[]> letters) {
+        step0();
         for (int[] letter : letters) {
             step3(letter);
             step4();
