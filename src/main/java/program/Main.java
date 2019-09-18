@@ -3,6 +3,7 @@ package program;
 import backpropagation.Backpropagation;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -42,7 +43,12 @@ public class Main extends JFrame {
         recognizerButton.addActionListener(new ActionListener() {
             //ação ao clica no botão
             public void actionPerformed(ActionEvent e) {
-                selectRecognizerFile();
+                if(backpropagation.trained) {
+                    selectRecognizerFile();
+                }else{
+                    JOptionPane.showMessageDialog(new JFrame(), "Primeiro você deve treinar o sistema", "ERRO",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -170,20 +176,25 @@ public class Main extends JFrame {
     }
 
     public void selectRecognizerFile() {
-        JFileChooser chooser = new JFileChooser();
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File recognitionFile = chooser.getSelectedFile();
-            int[] letter = recognitionLetterReader(recognitionFile);
-            double[] result = backpropagation.recognition(letter);
-            translateResult(result);
-            textArea.append("Reconhecimento finalizado\n");
-            textArea.append("-------------------------\n");
-        } else {
-        }
+
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+            chooser.setFileFilter(filter);
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File recognitionFile = chooser.getSelectedFile();
+                int[] letter = recognitionLetterReader(recognitionFile);
+                double[] result = backpropagation.recognition(letter);
+                translateResult(result);
+                textArea.append("Reconhecimento finalizado\n");
+                textArea.append("-------------------------\n");
+            } else {
+            }
     }
 
     public void selectLearningFiles() {
         JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+        chooser.setFileFilter(filter);
         chooser.setMultiSelectionEnabled(true);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File[] learningFiles = chooser.getSelectedFiles();

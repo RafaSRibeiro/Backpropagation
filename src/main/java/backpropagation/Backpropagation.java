@@ -10,6 +10,7 @@ public class Backpropagation {
 
     public static final int T_SIZE = 7;
     public static final int Y_SIZE = 7;
+    public boolean trained = false;
 
     private double x[] = new double[X_SIZE];
     private double z[] = new double[Z_SIZE];
@@ -45,6 +46,7 @@ public class Backpropagation {
             step7();
             step8();
         }
+        this.trained = true;
     }
 
     private void step0() {
