@@ -5,8 +5,6 @@ import java.util.Random;
 
 public class Backpropagation {
 
-    ArrayList<int[]> letters = new ArrayList();
-
     public static final int X_SIZE = 63;
     public static final int Z_SIZE = 63;
 
@@ -30,8 +28,8 @@ public class Backpropagation {
     private double deltaW[][] = new double[Z_SIZE][Y_SIZE];
     private double deltaV[][] = new double[X_SIZE][Z_SIZE];
 
-    public Backpropagation(ArrayList<int[]> letters) {
-        this.letters = letters;
+    public Backpropagation() {
+        step0();
     }
 
     public double[] recognition(int[] letter) {
@@ -41,9 +39,7 @@ public class Backpropagation {
         return y;
     }
 
-    public void training() {
-        step0();
-
+    public void training(ArrayList<int[]> letters) {
         for (int[] letter : letters) {
             step3(letter);
             step4();
@@ -57,13 +53,13 @@ public class Backpropagation {
     private void step0() {
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < z.length; j++) {
-                v[i][j] = 2 * new Random().nextDouble() - 1;
+                v[i][j] = Math.random() - 0.5;
             }
         }
 
         for (int j = 0; j < z.length; j++) {
             for (int k = 0; k < y.length; k++) {
-                w[j][k] = 2 * new Random().nextDouble() - 1;
+                w[j][k] = Math.random() - 0.5;
             }
         }
     }

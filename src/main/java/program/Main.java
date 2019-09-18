@@ -12,26 +12,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main extends JFrame {
-    public static ArrayList<int[]> letters = new ArrayList<int[]>();
 
-    private String fileName;
+    Backpropagation backpropagation = new Backpropagation();
 
-    Backpropagation backpropagation = new Backpropagation(letters);
+    JTextArea textArea = new JTextArea();
+
+    public static void main(String args[]) {
+        new Main();
+    }
 
     public Main() {
 
         setTitle("Lexic Analizer");
         setResizable(true);
-        this.setExtendedState( this.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
         JPanel panel = (JPanel) this.getContentPane();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
         JButton learnerButton = new JButton("Learn");
         learnerButton.addActionListener(new ActionListener() {
             //ação ao clica no botão
             public void actionPerformed(ActionEvent e) {
-
+                backpropagation.training(letterReader());
+                textArea.append("Treinamento finalizado\n");
+                textArea.append("----------------------\n");
             }
         });
 
@@ -40,29 +45,27 @@ public class Main extends JFrame {
             //ação ao clica no botão
             public void actionPerformed(ActionEvent e) {
                 selectFile();
+                textArea.append("Reconhecimento finalizado\n");
+                textArea.append("-------------------------\n");
             }
         });
 
+
         panel.add(learnerButton);
         panel.add(recognizerButton);
-
-        letterReader();
-
-        backpropagation.training();
-
-//        int[] letter = recognitionLetterReader();
-
+        panel.add(textArea);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
-
     //metodo para ler os arquivos da pasta /training set
-    public static void letterReader() {
+
+    public ArrayList<int[]> letterReader() {
 
         File files[];
         File folder = new File("training_set");
         files = folder.listFiles();
+        ArrayList<int[]> letters = new ArrayList<int[]>();
 
         for (int i = 0; i < files.length; i++) {
             try {
@@ -81,6 +84,7 @@ public class Main extends JFrame {
                     } else if (currentChar.equals('#')) {
                         letter[j] = 1;
                     } else {
+                        textArea.append("Caracter não reconhecido no método de aprendizagem\n");
                         throw new Exception("Caracter não reconhecido no método de aprendizagem");
                     }
                 }
@@ -98,6 +102,8 @@ public class Main extends JFrame {
                 e.printStackTrace();
             }
         }
+
+        return letters;
     }
 
     private int[] recognitionLetterReader(File recognitionFile) {
@@ -129,12 +135,7 @@ public class Main extends JFrame {
         return letter;
     }
 
-    public static void main(String args[]) {
-        for (int i = 0; i < 20; i++)
-        new Main();
-    }
-
-    private static void translateResult(double[] result) {
+    private void translateResult(double[] result) {
         double max = result[0];
         int indexMax = 0;
         for (int i = 1; i < result.length; i++) {
@@ -143,44 +144,43 @@ public class Main extends JFrame {
                 indexMax = i;
             }
         }
+
+        String letter = new String();
         switch (indexMax) {
             case 0:
-                System.out.println("A");
+                letter = "A";
                 break;
             case 1:
-                System.out.println("B");
+                letter = "B";
                 break;
             case 2:
-                System.out.println("C");
+                letter = "C";
                 break;
             case 3:
-                System.out.println("D");
+                letter = "D";
                 break;
             case 4:
-                System.out.println("E");
+                letter = "E";
                 break;
             case 5:
-                System.out.println("J");
+                letter = "J";
                 break;
             case 6:
-                System.out.println("K");
+                letter = "K";
                 break;
         }
 
-        System.out.println("com " + max + "% de chance");
+        textArea.append(letter + " com " + max + "% de chance.\n");
     }
 
     public void selectFile() {
         JFileChooser chooser = new JFileChooser();
-        // optionally set chooser options ...
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File recognitionFile = chooser.getSelectedFile();
             int[] letter = recognitionLetterReader(recognitionFile);
             double[] result = backpropagation.recognition(letter);
-//        System.out.println(Arrays.toString(result));
             translateResult(result);
         } else {
-            // user changed their mind
         }
     }
 }
