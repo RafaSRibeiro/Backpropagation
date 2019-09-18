@@ -166,7 +166,7 @@ public class Main extends JFrame {
                 break;
         }
 
-        textArea.append(letter + " com " + max + "% de chance.\n");
+        textArea.append(letter + " com " + String.format("%.2f", (max * 100)) + "% de chance.\n");
     }
 
     public void selectRecognizerFile() {
