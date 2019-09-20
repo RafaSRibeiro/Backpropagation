@@ -52,13 +52,13 @@ public class Backpropagation {
     private void step0() {
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < z.length; j++) {
-                v[i][j] = Math.random() - 0.5;
+                v[i][j] = 2 * new Random().nextDouble() - 1;
             }
         }
 
         for (int j = 0; j < z.length; j++) {
             for (int k = 0; k < y.length; k++) {
-                w[j][k] = Math.random() - 0.5;
+                w[j][k] = 2 * new Random().nextDouble() - 1;
             }
         }
     }
