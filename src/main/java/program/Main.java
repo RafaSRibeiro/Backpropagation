@@ -164,7 +164,7 @@ public class Main extends JFrame {
                     letter = "K";
                     break;
             }
-            if((valorResult * 100) > 0)
+            if((valorResult * 100) > 70)
             textArea.append(letter + " = " + String.format("%.2f", (valorResult * 100)) + "% de chance.\n");
         }
     }
