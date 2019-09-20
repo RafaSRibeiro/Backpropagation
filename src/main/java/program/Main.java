@@ -138,41 +138,35 @@ public class Main extends JFrame {
     }
 
     private void translateResult(double[] result) {
-        double max = result[0];
-        int indexMax = 0;
-        for (int i = 1; i < result.length; i++) {
-            if (result[i] > max) {
-                max = result[i];
-                indexMax = i;
-            }
-        }
-
         String letter = new String();
-        switch (indexMax) {
-            case 0:
-                letter = "A";
-                break;
-            case 1:
-                letter = "B";
-                break;
-            case 2:
-                letter = "C";
-                break;
-            case 3:
-                letter = "D";
-                break;
-            case 4:
-                letter = "E";
-                break;
-            case 5:
-                letter = "J";
-                break;
-            case 6:
-                letter = "K";
-                break;
+        for (int i = 0; i < result.length; i++) {
+            double valorResult = result[i];
+            switch (i) {
+                case 0:
+                    letter = "A";
+                    break;
+                case 1:
+                    letter = "B";
+                    break;
+                case 2:
+                    letter = "C";
+                    break;
+                case 3:
+                    letter = "D";
+                    break;
+                case 4:
+                    letter = "E";
+                    break;
+                case 5:
+                    letter = "J";
+                    break;
+                case 6:
+                    letter = "K";
+                    break;
+            }
+            if((valorResult * 100) > 70)
+            textArea.append(letter + " = " + String.format("%.2f", (valorResult * 100)) + "% de chance.\n");
         }
-
-        textArea.append(letter + " com " + String.format("%.2f", (max * 100)) + "% de chance.\n");
     }
 
     public void selectRecognizerFile() {
